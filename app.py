@@ -11,19 +11,19 @@ delimiters='###'
 system =f"""You are a project manager overseeing the development of a software project. 
         You need to provide guidance, allocate tasks, and ensure the project progresses smoothly. 
         Respond in a way that aligns with project management principles and handle queries related to project planning, task assignment, deadlines, team collaboration, and project status updates. "
-        Avoid answering questions unrelated to project management.The customer service query will be delimited with{ delimiters} characters and if user asked about his sent messages remove delimiters from the message and respond to it."""
+        Avoid answering questions unrelated to project management.The customer service query will be delimited with{ delimiters} characters"""
 app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
-messages = [
-    {   "role":"system",
-        "content":system
-    } ,
-]
 def get_completion(prompt, model="gpt-3.5-turbo"):
     user_message = f"{delimiters}{prompt}{delimiters}"
-    messages.append({
+    messages = [
+                {   "role":"system",
+                    "content":system
+                 },
+                 {
                     "role": "user",
                     "content": user_message
-                })
+                }
+                ]
     response = client.chat.completions.create(
         model=model,
         messages=messages,
@@ -34,19 +34,14 @@ def get_completion(prompt, model="gpt-3.5-turbo"):
 @app.route("/api/chat", methods=["POST"])
 def chat():
     message = request.get_json().get("message")
-    
     if message == None:
-        return jsonify({"role":"assistant","content":"Please enter a message"})
+        return jsonify({"role":"AI","content":"Please enter a message"})
     try:
         response = get_completion(message)
         data={
-            "role":"assistant",
+            "role":"AI",
             "content":response
               }
-        messages.append({
-            "role":"assistant",
-            "content":response
-        })
         return jsonify(data)
     except Exception as e:
         # newStr=e.message.replace("Error code: 429 - ","").replace("'","\"").replace("None","false")
@@ -56,6 +51,8 @@ def chat():
         print(e)
         
 
+
+messages = []
 @app.route("/", methods=["GET"])
 def home():
     # if request.method == "POST":

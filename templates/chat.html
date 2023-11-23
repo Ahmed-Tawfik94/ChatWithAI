@@ -1,78 +1,60 @@
-{%include './layout.html'%} 
-{% block title%} Chat {% endblock %}
+{%include './layout.html'%}
 {%block style%}
 <style>
-  /* Set height and overflow properties for the custom scrollable div */
-  .custom-scrollable-div {
-    height: calc(100vh - 250px);
-    overflow-y: scroll;
-    background-image: url('{{url_for("static", filename="img/bg2.jpg")}}');
-    background-image: url("../src/img/bg1.jpg");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-blend-mode: darken;
-  }
+    /* Set height and overflow properties for the custom scrollable div */
+    .custom-scrollable-div {
+        height: calc(100vh - 250px);
+        overflow-y: scroll;
+        background-image: url('{{url_for("static", filename="img/bg2.jpg")}}');
+        background-image: url('../src/img/bg1.jpg');
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-blend-mode: darken;
+    }
 
-  /* Remove scrollability from the body */
-  body {
-    overflow: hidden;
-    height: 100vh;
-  }
-  #chatbox::placeholder {
-    color: white;
-  }
-  .card-body pre {
-    background-color: var(--bs-gray-700);
-    border: 1px solid var(--bs-gray-500);
-    border-radius: 5px;
-    padding: 10px;
-  }
-  card-body code:not([class]) {
-    /* Your styles for code tags without a class go here */
-    color: var(--bs-gray-700);
-    /* Add any other styles you want */
-  }
-  .bg-chatbot {
-    background: #0a969c;
-  }
+    /* Remove scrollability from the body */
+    body {
+        overflow: hidden;
+        height: 100vh;
+    }
+    #chatbox::placeholder {
+        color:white;
+    }
+    .card-body pre{
+        background-color: var(--bs-gray-700);
+        border: 1px solid var(--bs-gray-500);
+        border-radius: 5px;
+        padding: 10px;
+    }
+    card-body code:not([class]) {
+        /* Your styles for code tags without a class go here */
+        color: var(--bs-gray-700);
+        /* Add any other styles you want */
+      }
+      .bg-chatbot{
+        background: #0a969c;
+      }
 </style>
-{%endblock%} {%block content%}
+{%endblock%}
+{%block content%}
 <div class="container">
-  <h1 class="text-center py-2">Chat</h1>
-  <div
-    class="row border border-primary p-3 rounded custom-scrollable-div"
-    style="--bs-border-opacity: 0.5"
-  >
-    <div id="chatBody" class="col-12">
-      {%include './components/messageBubble.html'%}
+    <h1 class="text-center py-2">Chat</h1>
+    <div class="row border border-primary p-3 rounded custom-scrollable-div " style="--bs-border-opacity: .5;">
+        <div id="chatBody" class="col-12">
+            {%include './components/messageBubble.html'%}
+        </div>
     </div>
-  </div>
-  <div class="row py-3">
-    <div class="col-12 p-0">
-      <div class="mb-3 d-flex justify-content-between position-relative">
-        <textarea
-          id="chatbox"
-          type="text"
-          class="form-control bg-dark text-white"
-          placeholder="Enter your message"
-          id="message"
-          name="message"
-          rows="4"
-          maxlength="300"
-          style="resize: none"
-        ></textarea>
-        <button
-          id="chatsend"
-          type="submit"
-          class="btn btn-primary position-absolute end-0 top-50 translate-middle-y rounded-circle mx-3"
-        >
-          <i class="fa-solid fa-play"></i>
-        </button>
-      </div>
+        <div class="row py-3">
+            <div class="col-12 p-0">
+                    <div class="mb-3 d-flex justify-content-between position-relative">
+                        <textarea id="chatbox" type="text" class="form-control bg-dark text-white" placeholder="Enter your message" id="message" name="message" rows="4" maxlength="300" style="resize: none;"></textarea>
+                        <button id="chatsend" type="submit" class="btn btn-primary position-absolute end-0 top-50 translate-middle-y rounded-circle mx-3"><i class="fa-solid fa-play"></i></button>
+                    </div>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
-{%endblock%} {%block script%}
+{%endblock%}
+{%block script%}
 <script src="{{url_for('static',filename='/js/chat.js')}}"></script>
 {%endblock%}
