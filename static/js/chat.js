@@ -29,23 +29,40 @@ chatAI.prototype.init=function(){
     // Event listener for button click
     this.chatsend.on('click', self.sendMessage);
     }
-chatAI.prototype.sendMessage=function() {
-const message = $('#chatbox').val();
-console.log('Sending message:', message);
-const temp=`<div class="d-flex justify-content-end">
-<div class="d-flex justify-content-between align-items-center">
-    <div class="card border border-1 mb-2" style="max-width:600px ;">
-        <div class="card-body p-2">
-            <p class="card-text">${message}</p>
-        </div>
-    </div>
-    <span style="width:36px; height:36px" class="px-1 mx-1 rounded-circle bg-warning d-flex justify-content-center align-items-center ">
-        <i class=" fa-solid fa-user fa-lg"></i>
-    </span>
-</div>
-</div>`
-$('#chatBody').append(temp);
-// Add your logic to send the message here
+chatAI.prototype.sendMessage= async function() {
+const message = $('#chatbox').val().trim();
+if (message === '') {
+    return;
+}  
+const msg = {message:message,role:'user'}
+// this.messages.push(msg);
+const El=Mustache.render($('#message-template').html(), {message:msg.message,isUser:msg.role === 'user'});
+ // Add your logic to send the message here
+$('#chatBody').append(El);
+// this.displayMessage(message);
+$('#chatbox').val('');
+fetch('/api/chat',{
+    method:'POST',
+    headers:{
+        'Content-Type':'application/json'
+    },
+        body:JSON.stringify({message:message})
+    }).then(res=>res.json()).then(data=>{
+        console.log(data);
+        let messageToHtml=markdown.makeHtml(data.content);
+        // this.messages.push(data);
+        const El=Mustache.render($('#message-template').html(), {message:messageToHtml,isUser:data.role === 'user'});
+        // Add your logic to send the message here
+        $('#chatBody').append(El);
+    }).catch(err=>{
+        console.log(err);
+    })
+    // testRole=!testRole;
+    // const msg={
+    //     message:message,
+    //     role:testRole
+
+    // }
 }
 
 

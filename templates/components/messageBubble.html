@@ -1,0 +1,32 @@
+<script id="message-template" type="text/html">
+    <%#isUser%>
+    <div class="d-flex justify-content-end">
+        <div class="d-flex justify-content-between ">
+            <div class="card border border-1 mb-2" style="max-width:600px ;">
+                <div class="card-body p-2">
+                    <p class="card-text"><%{ message }%></p>
+                </div>
+            </div>
+            <span style="width:36px; height:36px" class="px-1 mx-1 rounded-circle bg-warning d-flex justify-content-center align-items-center align-self-start">
+                <i class=" fa-solid fa-user fa-lg"></i>
+            </span>
+        </div>
+    </div>
+    <%/isUser%>
+
+    <%^isUser%>
+    <div class="d-flex justify-content-start">
+        <div class="d-flex justify-content-between ">
+            <span style="width:36px; height:36px" class="px-1 mx-1 rounded-circle bg-warning d-flex justify-content-center align-items-center align-self-start">
+                <i class="fa-solid fa-robot fa-lg"></i>
+            </span>
+            <div class="card bg-chatbot text-white border border-1 mb-2" style="max-width:600px ;">
+                <div class="card-body p-2">
+                    <p class="card-text"><%{message}%></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%/isUser%>
+
+</script>
