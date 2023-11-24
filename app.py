@@ -1,5 +1,6 @@
 from flask import Flask , render_template,request,url_for,redirect,jsonify
 import os
+import openai
 from openai import OpenAI
 import json
 # import tiktoken
@@ -34,21 +35,35 @@ def get_completion(prompt, model="gpt-3.5-turbo"):
 @app.route("/api/chat", methods=["POST"])
 def chat():
     message = request.get_json().get("message")
+    data={}
     if message == None:
         return jsonify({"role":"AI","content":"Please enter a message"})
     try:
         response = get_completion(message)
         data={
-            "role":"AI",
+            "role":"assistant",
             "content":response
               }
-        return jsonify(data)
-    except Exception as e:
-        # newStr=e.message.replace("Error code: 429 - ","").replace("'","\"").replace("None","false")
-        # jsonString=json.loads(newStr)
-        # err_msg=jsonString['error']['message']
-        return jsonify({"role":"AI","content":e})
+        messages.append(data)
+    except openai.APIError as e:
+    #Handle API error here, e.g. retry or log
         print(e)
+        data={"role":"assistant","content":f"OpenAI API returned an API Error {e}"}
+    
+    except openai.APIConnectionError as e:
+        #Handle connection error here
+        print(e)
+        data ={"role":"assistant","content":f"Failed to connect to OpenAI API {e}"}
+
+    except openai.RateLimitError as e:
+        #Handle rate limit error (we recommend using exponential backoff)
+        print(e)
+        data ={"role":"assistant","content":f"OpenAI API request exceeded rate limit{e}"}
+    except Exception as e:
+        print(e)
+        data ={"role":"assistant","content":f"something went wrong"}
+    finally:
+        return jsonify(data)
         
 
 
