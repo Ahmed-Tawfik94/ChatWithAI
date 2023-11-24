@@ -12,11 +12,12 @@ TODO: 1. get message element
 const chatAI = function () {
   this.chatbox = $("#chatbox");
   this.chatsend = $("#chatsend");
+  this.messageCounter=0
 };
 chatAI.prototype.init = function () {
   const self = this;
   // Event listener for keydown event
-  this.chatbox.on("keydown", function (event) {
+  self.chatbox.on("keydown", function (event) {
     // Check for Command (⌘) key and Enter key
     if (event.metaKey && event.key === "Enter") {
       self.sendMessage();
@@ -24,44 +25,104 @@ chatAI.prototype.init = function () {
   });
 
   // Event listener for button click
-  this.chatsend.on("click", self.sendMessage);
+  self.chatsend.on("click", ()=>self.sendMessage());
 };
 chatAI.prototype.sendMessage = async function () {
   const message = $("#chatbox").val().trim();
   if (message === "") {
     return;
   }
-  const msg = { message: message, role: "user" };
-  // this.messages.push(msg);
-  const El = Mustache.render($("#message-template").html(), {
-    message: msg.message,
-    isUser: msg.role === "user",
-  });
-  // Add your logic to send the message here
-  $("#chatBody").append(El);
-  $("#chatbox").val("");
-  fetch("/api/chat", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ message: message }),
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      let messageToHtml = markdown.makeHtml(data.content);
+  this.showMessage('user',message);
+  const assistantMessageId = `assistant-${this.messageCounter++}`;
+  this.showMessage('assistant','Typing',assistantMessageId);
+  let textAssissant = $('#'+assistantMessageId+' .assistantBubble').text();
 
-      const El = Mustache.render($("#message-template").html(), {
-        message: messageToHtml,
-        isUser: data.role === "user",
-      });
-      // appending the message to the chat body
-      $("#chatBody").append(El);
+  this.typed =new Typed(`#${assistantMessageId} .assistantBubble`, { 
+    strings: ['Typing', 'Typing.', 'Typing..', 'Typing...'],
+    typeSpeed: 50,
+    backSpeed: 100,
+    showCursor: false,
+    loop:true
+  });
+
+
+  try {
+    const res = await fetch("/api/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ message: message }),
     })
-    .catch((err) => {
-      console.log(err);
-    });
+
+    if (res.status ===200){ 
+      const data = await res.json();
+      console.log(data)
+      mardownToHtml = markdown.makeHtml(data.content);
+      this.updateMessage(mardownToHtml,assistantMessageId);
+    }else{
+      toastr.error('This is an error message', 'Error');
+    }
+  } catch (error) {
+      console.log(error)
+      toastr.error('This is an error message', 'Error');
+  }
+
+  
 };
+chatAI.prototype.showMessage = function (role,message,messageId) {
+  const rendered = Mustache.render($("#message-template").html(), {
+    message: message,
+    isUser: role === "user",
+    messageId: messageId,
+  });
+  // appending the message to the chat body
+  $("#chatBody").append(rendered);
+  if (role === "user") {
+    $("#chatbox").val("");
+  }else{
+    $("#chatbox").focus();
+  }
+  $("#chatBody").animate({  scrollTop: $("#chatBody")[0].scrollHeight}, 700);
+}
+chatAI.prototype.updateMessage = function (content, messageId) {
+  this.typed.stop();
+  // $('#' + messageId +' .assistantBubble').html(content);
+  new Typed(`#${messageId} .assistantBubble`, {
+    strings: [content],
+    typeSpeed: 10,
+    showCursor: false,
+  });
+  const $parentContainer = $('#chatBody');
+    const $childElement = $('#' + messageId +' .assistantBubble');
+
+    // Initialize the initial height
+    let lastHeight = $childElement.height();
+
+    // Create a MutationObserver to observe changes in the child element
+    const observer = new MutationObserver(() => {
+      const newHeight = $childElement.height();
+
+      // Check if the size is increasing
+      if (newHeight > lastHeight) {
+        // Clear the contents of the child element
+        // $childElement.empty();
+        let heightToScroll = newHeight - lastHeight;
+
+        // Scroll to the bottom of the parent container
+        $parentContainer.animate({  scrollTop: $parentContainer[0].scrollHeight}, 700);
+
+        // Update the last height
+        lastHeight = newHeight;
+      }
+    });
+
+    // Start observing the child element
+    observer.observe($childElement[0], { attributes: true, childList: true, subtree: true });
+}
 
 const chat = new chatAI();
 chat.init();
+
+ // Initialize the initial height
+ 
