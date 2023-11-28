@@ -1,4 +1,4 @@
-from flask import Flask , render_template,request,url_for,redirect,jsonify
+from flask import Flask , render_template,request,url_for,redirect,jsonify,send_file
 import os
 import openai
 from openai import OpenAI
@@ -76,3 +76,10 @@ def home():
 
 
     return render_template("chat.html")
+
+@app.route('/manifest.json')
+def serve_manifest():
+    return send_file('manifest.json', mimetype='application/manifest+json')
+@app.route('/sw.js')
+def serve_sw():
+    return send_file('sw.js', mimetype='application/javascript')

@@ -1,0 +1,23 @@
+{
+    "name": "AI Project Manager",
+    "short_name": "APM",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "theme_color": "#317EFB",
+    "background_color": "#317EFB",
+    "icons": [
+      {
+        "src": "/static/img/128x128.png",
+        "sizes": "128x128",
+        "type": "image/png",
+        "purpose": "any maskable"
+      },
+      {
+        "src": "/static/img/512x512.png",
+        "sizes": "512x512",
+        "type": "image/png",
+        "purpose": "any maskable"
+      }
+    ]
+  }

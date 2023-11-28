@@ -1,8 +1,7 @@
 .custom-scrollable-div {
     height: calc(100vh - 250px);
     overflow-y: scroll;
-    background-image: url('{{url_for("static", filename="img/bg2.jpg")}}');
-    background-image: url("../src/img/bg1.jpg");
+    /* background-image: url("/static/img/bg2.jpg"); */
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
