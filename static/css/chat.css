@@ -14,8 +14,34 @@
     overflow: hidden;
     height: 100vh;
   }
-  #chatbox::placeholder {
-    color: white;
+  body,#chatbox,#chatbox::placeholder {
+    color:var(--bs-gray-200)!important;
+  }
+ 
+  #chatbox:focus , #chatbox:active {
+    outline: none !important;
+    box-shadow: none!important;
+    border-color: var(--bs-gray-900)!important;
+    background-color: var(--bs-gray-700)!important;
+    transition: background-color 0.4s ease-out!important;
+  }
+  .border-dark-900{
+    border-color: var(--bs-gray-900) !important;
+  }
+  .bg-dark-900{
+    background-color: var(--bs-gray-900) !important;
+  }
+  .border-dark-800{
+    border-color: var(--bs-gray-800) !important;
+  }
+  .bg-dark-800{
+    background-color: var(--bs-gray-800) !important;
+  }
+  .bg-blue-800{
+    background-color: #052c65!important;
+  }
+  .border-blue-800{
+    border-color: #052c65!important;
   }
   .card-body pre {
     background-color: var(--bs-gray-700);
@@ -32,9 +58,61 @@
     background: #0a969c;
   }
   #chatBody{
-    max-height: 700px;
+    max-height: 734px;
       overflow-y: auto;
-      border: 1px solid #ccc;
+      /* border: 1px solid #ccc; */
       padding: 10px;
       scroll-behavior: smooth;
   }
+  
+  .assistantBubble{
+    min-width: 63px;
+  }
+  /* width */
+  #chatBody::-webkit-scrollbar {
+    width: 5px; /* adjust as needed */
+  }
+  
+  /* track */
+  #chatBody::-webkit-scrollbar-track {
+    background: var(--bs-gray-900); /* or any color you prefer */
+    border-radius: 5px;
+  }
+  
+  /* handle */
+  #chatBody::-webkit-scrollbar-thumb {
+    background: var(--bs-gray-600); /* or any color you prefer */
+    border-radius: 5px;
+  }
+  
+  /* handle on hover */
+  #chatBody::-webkit-scrollbar-thumb:hover {
+    background: var(--bs-gray-700); /* or any color you prefer */
+  }
+  #chatsend{
+    transition: transform 1s ease;
+    background-color:transparent;
+  }
+  #chatsend:hover{
+    background-color: var(--bs-gray-700) !important;
+    transition: background-color 0.4s ease-out!important;
+  }
+  #chatsend:hover i{
+    transform: rotate(-90deg)!important;
+    transition: transform 0.5s ease-in-out!important;
+  }
+  #chatsend:not(:hover) i{
+    transform: rotate(0deg)!important;
+    transition: transform 0.5s ease-in-out!important;
+  }
+  #chatsend:disabled {
+    cursor: not-allowed!important;
+  }
+  #chatbox:disabled {
+    cursor: not-allowed!important;
+    background-color: var(--bs-gray-700)!important;
+  }
+  #chatbox:disabled::placeholder{
+    color:var(--bs-gray-500)!important;
+  }
+

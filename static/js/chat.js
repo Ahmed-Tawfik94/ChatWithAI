@@ -13,35 +13,49 @@ const chatAI = function () {
   this.chatbox = $("#chatbox");
   this.chatsend = $("#chatsend");
   this.messageCounter=0
+  this.messages = [];
+  this.delimiter = "###";
 };
 chatAI.prototype.init = function () {
   const self = this;
   // Event listener for keydown event
   self.chatbox.on("keydown", function (event) {
     // Check for Command (⌘) key and Enter key
-    if (event.metaKey && event.key === "Enter") {
+    if (event.key === "Enter") {
       self.sendMessage();
+      $('#chatbox').blur()
+      $('#chatbox').prop('disabled', true);
+
+      $('#chatsend').prop('disabled', true);
+
     }
   });
 
   // Event listener for button click
-  self.chatsend.on("click", ()=>self.sendMessage());
+  self.chatsend.on("click", ()=>{
+    self.sendMessage()
+  $('#chatbox').prop('disabled', true);
+  });
 };
 chatAI.prototype.sendMessage = async function () {
   const message = $("#chatbox").val().trim();
   if (message === "") {
     return;
   }
+  this.messages.push({
+    role: "user",  
+    content:`${this.delimiter}${message}${this.delimiter}`
+  });
   this.showMessage('user',message);
   const assistantMessageId = `assistant-${this.messageCounter++}`;
-  this.showMessage('assistant','Typing',assistantMessageId);
-  let textAssissant = $('#'+assistantMessageId+' .assistantBubble').text();
+  this.showMessage('assistant','<span>Typing</span><span class="typing"></span>',assistantMessageId);
 
-  this.typed =new Typed(`#${assistantMessageId} .assistantBubble`, { 
-    strings: ['Typing', 'Typing.', 'Typing..', 'Typing...'],
+  this.typed =new Typed(`#${assistantMessageId} .assistantBubble .typing`, { 
+    strings: ['.', '..', '...'],
     typeSpeed: 50,
     backSpeed: 100,
     showCursor: false,
+    stopOnFocus: false,
     loop:true
   });
 
@@ -52,12 +66,13 @@ chatAI.prototype.sendMessage = async function () {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ message: message }),
+      body: JSON.stringify(this.messages),
     })
 
     if (res.status ===200){ 
       const data = await res.json();
       console.log(data)
+      this.messages.push(data);
       mardownToHtml = markdown.makeHtml(data.content);
       this.updateMessage(mardownToHtml,assistantMessageId);
     }else{
@@ -65,7 +80,7 @@ chatAI.prototype.sendMessage = async function () {
     }
   } catch (error) {
       console.log(error)
-      toastr.error('This is an error message', 'Error');
+      toastr.error(`This is an error message ${error}`, 'Error');
   }
 };
 
@@ -79,8 +94,6 @@ chatAI.prototype.showMessage = function (role,message,messageId) {
   $("#chatBody").append(rendered);
   if (role === "user") {
     $("#chatbox").val("");
-  }else{
-    $("#chatbox").focus();
   }
   $("#chatBody").animate({  scrollTop: $("#chatBody")[0].scrollHeight}, 700);
 }
@@ -91,6 +104,12 @@ chatAI.prototype.updateMessage = function (content, messageId) {
     strings: [content],
     typeSpeed: 10,
     showCursor: false,
+    stopOnFocus: false,
+    onComplete: function(self) {
+      $('#chatbox').prop('disabled', false);
+      $('#chatsend').prop('disabled', false);
+      $('#chatbox').focus();
+    }
   });
   const $parentContainer = $('#chatBody');
     const $childElement = $('#' + messageId +' .assistantBubble');
@@ -118,6 +137,8 @@ chatAI.prototype.updateMessage = function (content, messageId) {
 
     // Start observing the child element
     observer.observe($childElement[0], { attributes: true, childList: true, subtree: true });
+    
+
 }
 
 const chat = new chatAI();

@@ -12,62 +12,53 @@ delimiters='###'
 system =f"""You are a project manager overseeing the development of a software project. 
         You need to provide guidance, allocate tasks, and ensure the project progresses smoothly. 
         Respond in a way that aligns with project management principles and handle queries related to project planning, task assignment, deadlines, team collaboration, and project status updates. "
-        Avoid answering questions unrelated to project management.The customer service query will be delimited with{ delimiters} characters"""
+        Avoid answering questions unrelated to project management.The customer service query will be delimited with{ delimiters} characters. Your output have to be in a beautiful markdown format."""
 app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 def get_completion(prompt, model="gpt-3.5-turbo"):
-    user_message = f"{delimiters}{prompt}{delimiters}"
+    # user_message = f"{delimiters}{prompt.content}{delimiters}"
     messages = [
                 {   "role":"system",
                     "content":system
-                 },
-                 {
-                    "role": "user",
-                    "content": user_message
-                }
+                 }
                 ]
+    messages=messages + prompt
     response = client.chat.completions.create(
         model=model,
         messages=messages,
         temperature=0,
     )
-    return response.choices[0].message.content
+    return response.choices[0].message
 
 @app.route("/api/chat", methods=["POST"])
 def chat():
-    message = request.get_json().get("message")
+    message = request.get_json()
     data={}
     if message == None:
         return jsonify({"role":"AI","content":"Please enter a message"})
     try:
         response = get_completion(message)
         data={
-            "role":"assistant",
-            "content":response
+            "role":response.role,
+            "content":response.content
               }
-        messages.append(data)
-    except openai.APIError as e:
+    except (openai.APIError,openai.APIConnectionError,openai.RateLimitError ) as e:
     #Handle API error here, e.g. retry or log
-        print(e)
-        data={"role":"assistant","content":f"OpenAI API returned an API Error {e}"}
+        data={"role":"assistant","content":f"Error: {e}"}
     
-    except openai.APIConnectionError as e:
-        #Handle connection error here
-        print(e)
-        data ={"role":"assistant","content":f"Failed to connect to OpenAI API {e}"}
+    # except openai.APIConnectionError as e:
+    #     #Handle connection error here
+    #     data ={"role":"assistant","content":f"Failed to connect {e}"}
 
-    except openai.RateLimitError as e:
-        #Handle rate limit error (we recommend using exponential backoff)
-        print(e)
-        data ={"role":"assistant","content":f"OpenAI API request exceeded rate limit{e}"}
+    # except openai.RateLimitError as e:
+    #     #Handle rate limit error (we recommend using exponential backoff)
+    #     data ={"role":"assistant","content":f"Request exceeded rate limit{e}"}
     except Exception as e:
-        print(e)
         data ={"role":"assistant","content":f"something went wrong"}
     finally:
         return jsonify(data)
         
 
 
-messages = []
 @app.route("/", methods=["GET"])
 def home():
     # if request.method == "POST":

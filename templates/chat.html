@@ -8,16 +8,16 @@
 {%block content%}
 <div class="container">
     <h1 class="text-center py-2">Chat</h1>
-    <div class="row border border-primary p-3 rounded custom-scrollable-div " style="--bs-border-opacity: .5;">
+    <div class="row border border-dark-800 rounded custom-scrollable-div "  style="--bs-border-opacity: .5;overflow: hidden;">
         <div id="chatBody" class="col-12">
             {%include './components/messageBubble.html'%}
         </div>
     </div>
-        <div class="row py-3">
+        <div class="row py-3" >
             <div class="col-12 p-0">
                     <div class="mb-3 d-flex justify-content-between position-relative">
-                        <textarea id="chatbox" type="text" class="form-control bg-dark text-white" placeholder="Enter your message" id="message" name="message" rows="4" maxlength="300" style="resize: none;"></textarea>
-                        <button id="chatsend" type="submit" class="btn btn-primary position-absolute end-0 top-50 translate-middle-y rounded-circle mx-3"><i class="fa-solid fa-play"></i></button>
+                        <textarea id="chatbox" type="text" class="form-control bg-dark-900 border-dark-800 text-white" placeholder="Enter your message" id="message" name="message" rows="4" maxlength="300" style="resize: none;"></textarea>
+                        <button id="chatsend" type="submit" class="btn btn-primary bg-dark-800 border-dark-800 position-absolute end-0 top-50 translate-middle-y rounded-circle mx-3"><i class="fa-solid fa-chevron-right"></i></button>
                     </div>
             </div>
         </div>
