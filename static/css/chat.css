@@ -1,3 +1,12 @@
+:root{
+  --indego-800: rgb(41, 6, 96);
+  --indego-900: rgb(20, 3, 48);
+  --purple-800: rgb(43, 26, 77);
+  --purple-900:rgb(22, 13, 38);
+  --purple-100:#e2d9f3;
+  --purple-200:#c5b3e6;
+  --purple-500:#6f42c1;
+}
 .custom-scrollable-div {
     height: calc(100vh - 250px);
     overflow-y: scroll;
@@ -14,15 +23,15 @@
     height: 100vh;
   }
   body,#chatbox,#chatbox::placeholder {
-    color:var(--bs-gray-200)!important;
+    color:var(--purple-100)!important;
   }
  
   #chatbox:focus , #chatbox:active {
     outline: none !important;
     box-shadow: none!important;
-    border-color: var(--bs-gray-900)!important;
+    /* border-color: var(--bs-gray-900)!important;
     background-color: var(--bs-gray-700)!important;
-    transition: background-color 0.4s ease-out!important;
+    transition: background-color 0.4s ease-out!important; */
   }
   .border-dark-900{
     border-color: var(--bs-gray-900) !important;
@@ -38,6 +47,30 @@
   }
   .bg-blue-800{
     background-color: #052c65!important;
+  }
+  .bg-blue-900{
+    background-color: #031939!important;
+  }
+  .bg-indego-800{
+    background-color: var(--indego-800)!important;
+  }
+  .bg-indego-900{
+    background-color: var(--indego-900)!important;
+  }
+  .bg-purple-200{
+    background-color: var(--purple-200)!important;
+  }
+  .bg-purple-500{
+    background-color: var(--purple-500)!important;
+  }
+  .bg-purple-800{
+    background-color: var(--purple-800)!important;
+  }
+  .bg-purple-900{
+    background-color: var(--purple-900)!important;
+  }
+  .border-purple-900{
+    border-color: var(--purple-900)!important;
   }
   .border-blue-800{
     border-color: #052c65!important;
@@ -57,8 +90,8 @@
     background: #0a969c;
   }
   #chatBody{
-    max-height: 734px;
-      overflow-y: auto;
+    max-height: 100%;
+      overflow-y: auto ;
       /* border: 1px solid #ccc; */
       padding: 10px;
       scroll-behavior: smooth;
@@ -109,9 +142,41 @@
   }
   #chatbox:disabled {
     cursor: not-allowed!important;
-    background-color: var(--bs-gray-700)!important;
+    background-color: rgba(var(--purple-800),0.7)!important;
   }
   #chatbox:disabled::placeholder{
     color:var(--bs-gray-500)!important;
   }
+.shadow-top-lg{
+  box-shadow: 0 -1rem 3rem rgba(0, 0, 0, 0.175)!important;
+}
+.shadow-bottom-lg{
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175)!important;
+}
+.chat-grid{
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas: "header" "chatBody" "chatInput";
+  height: 100vh!important;
+  width: 100vw!important;
+}
+.w-bubble{
+  max-width: 600px;
 
+}
+
+/* Mobile devices (portrait and landscape) */
+@media only screen and (max-width: 767px) {
+  /* Your mobile styles go here */
+  .w-bubble{
+    max-width: 300px;
+  }
+}
+
+/* Target landscape mode specifically (optional) */
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+  /* Landscape styles go here */
+  .w-bubble{
+    max-width: 400px;
+  }
+}

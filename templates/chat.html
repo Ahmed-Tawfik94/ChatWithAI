@@ -6,23 +6,29 @@
 {%endblock%} 
 
 {%block content%}
-<div class="container">
-    <h1 class="text-center py-2">Chat</h1>
-    <div class="row border border-dark-800 rounded custom-scrollable-div "  style="--bs-border-opacity: .5;overflow: hidden;">
-        <div id="chatBody" class="col-12">
+<div class="chat-grid bg-purple-900 w-100">
+    <!-- header area -->
+    <div class="row  bg-purple-800 py-2 shadow-bottom-lg position-relative">
+        <h1 class="text-center">PMA GPT</h1>
+    </div>
+    <!-- chat box area -->
+    <div class="row custom-scrollable-div bg-purple-800"  style="--bs-border-opacity: .5;overflow: hidden; height: 100%;
+    ">
+        <div id="chatBody" class="col-12 px-3" style="background-color:transparent;">
             {%include './components/messageBubble.html'%}
         </div>
     </div>
-        <div class="row py-3" >
-            <div class="col-12 p-0">
-                    <div class="mb-3 d-flex justify-content-between position-relative">
-                        <textarea id="chatbox" type="text" class="form-control bg-dark-900 border-dark-800 text-white" placeholder="Enter your message" id="message" name="message" rows="4" maxlength="300" style="resize: none;"></textarea>
-                        <button id="chatsend" type="submit" class="btn btn-primary bg-dark-800 border-dark-800 position-absolute end-0 top-50 translate-middle-y rounded-circle mx-3"><i class="fa-solid fa-chevron-right"></i></button>
-                    </div>
-            </div>
+    <!-- text box area  -->
+    <div class="row shadow-top-lg bg-purple-800 px-md-3 px-2" style="margin: -2px!important;">
+        <div class="col-12 p-0">
+                <div class="d-flex justify-content-between align-items-center">
+                    <textarea id="chatbox" type="text" style="background-color: transparent;resize: none;" class="form-control border-0  border-dark-800 rounded-0  text-white" placeholder="Enter your message" id="message" name="message" rows="2" maxlength="300"></textarea>
+                    <button id="chatsend" type="submit" class="btn btn-primary bg-purple-900 border-purple-900 rounded-circle mx-1 border"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
         </div>
+    </div>
     </div>
 {%endblock%}
 {%block script%}
 <script src="{{url_for('static',filename='/js/chat.js')}}"></script>
-{%endblock%}
+{%endblock%} 
