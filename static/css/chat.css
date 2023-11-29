@@ -2,7 +2,7 @@
   --indego-800: rgb(41, 6, 96);
   --indego-900: rgb(20, 3, 48);
   --purple-800: rgb(43, 26, 77);
-  --purple-900:rgb(22, 13, 38);
+  --purple-900:#160d26;
   --purple-100:#e2d9f3;
   --purple-200:#c5b3e6;
   --purple-500:#6f42c1;
@@ -159,6 +159,7 @@
   grid-template-areas: "header" "chatBody" "chatInput";
   height: 100vh!important;
   width: 100vw!important;
+  overflow: hidden!important;
 }
 .w-bubble{
   max-width: 600px;
