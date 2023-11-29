@@ -1,7 +1,7 @@
 :root{
   --indego-800: rgb(41, 6, 96);
   --indego-900: rgb(20, 3, 48);
-  --purple-800: rgb(43, 26, 77);
+  --purple-800: #2b1a4d;
   --purple-900:#160d26;
   --purple-100:#e2d9f3;
   --purple-200:#c5b3e6;
@@ -72,6 +72,7 @@
   .border-purple-900{
     border-color: var(--purple-900)!important;
   }
+
   .border-blue-800{
     border-color: #052c65!important;
   }
@@ -148,10 +149,10 @@
     color:var(--bs-gray-500)!important;
   }
 .shadow-top-lg{
-  box-shadow: 0 -1rem 3rem rgba(0, 0, 0, 0.175)!important;
+  box-shadow: 0 -2rem 3rem rgba(0, 0, 0, 0.175)!important;
 }
 .shadow-bottom-lg{
-  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175)!important;
+  box-shadow: 0 2rem 3rem rgba(0, 0, 0, 0.175)!important;
 }
 .chat-grid{
   display: grid;
