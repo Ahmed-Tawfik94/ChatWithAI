@@ -61,25 +61,27 @@ chatAI.prototype.sendMessage = async function () {
 
 
   try {
-    const res = await fetch("/api/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(this.messages),
-    })
-
-    if (res.status ===200){ 
-      const data = await res.json();
-      console.log(data)
-      this.messages.push(data);
-      mardownToHtml = markdown.makeHtml(data.content);
-      this.updateMessage(mardownToHtml,assistantMessageId);
-    }else{
-      toastr.error('This is an error message', 'Error');
-    }
-  } catch (error) {
-      console.log(error)
+      
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(this.messages),
+      })
+      
+      if (res.status ===200){ 
+        const data = await res.json();
+        // console.log(data)
+        this.messages.push(data);
+        mardownToHtml = markdown.makeHtml(data.content);
+        this.updateMessage(mardownToHtml,assistantMessageId);
+      }else{
+        toastr.error('This is an error message', 'Error');
+      }
+    
+    } catch (error) {
+      // console.log(error)
       toastr.error(`This is an error message ${error}`, 'Error');
   }
 };

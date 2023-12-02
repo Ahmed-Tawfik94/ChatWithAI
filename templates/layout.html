@@ -7,6 +7,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-title" content="AI Project Manager">
+    <meta name="theme-color" content="#2b1a4d"/>
+    <meta name="description" content="this PWA is designed to help newly users to understand about project management">
     <link rel="apple-touch-icon" href="/static/icon.png">
 
     <link
@@ -48,9 +50,11 @@
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
           navigator.serviceWorker.register("/sw.js").then(function(registration) {
-            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            //console.log(registration);
+            //console.log('ServiceWorker registration successful with scope: ', registration.scope);
           }, function(err) {
-            console.log('ServiceWorker registration failed: ', err);
+            toastr.error(`ServiceWorker registration failed ${err}`, 'Error');
+            //console.log('ServiceWorker registration failed: ', err);
           });
         });
       }

@@ -1,11 +1,15 @@
 :root{
   --indego-800: rgb(41, 6, 96);
   --indego-900: rgb(20, 3, 48);
-  --purple-800: #2b1a4d;
   --purple-900:#160d26;
-  --purple-100:#e2d9f3;
-  --purple-200:#c5b3e6;
+  --purple-800: #2b1a4d;
+  --purple-700:#432874;
+  --purple-600:#59359a;
   --purple-500:#6f42c1;
+  --purple-400:#8c68cd;
+  --purple-300:#a98eda;
+  --purple-200:#c5b3e6;
+  --purple-100:#e2d9f3;
 }
 .custom-scrollable-div {
     height: calc(100vh - 250px);
@@ -108,26 +112,26 @@
   
   /* track */
   #chatBody::-webkit-scrollbar-track {
-    background: var(--bs-gray-900); /* or any color you prefer */
+    background: var(--purple-900); /* or any color you prefer */
     border-radius: 5px;
   }
   
   /* handle */
   #chatBody::-webkit-scrollbar-thumb {
-    background: var(--bs-gray-600); /* or any color you prefer */
+    background: var(--purple-600); /* or any color you prefer */
     border-radius: 5px;
   }
   
   /* handle on hover */
   #chatBody::-webkit-scrollbar-thumb:hover {
-    background: var(--bs-gray-700); /* or any color you prefer */
+    background: var(--purple-700); /* or any color you prefer */
   }
   #chatsend{
     transition: transform 1s ease;
     background-color:transparent;
   }
   #chatsend:hover{
-    background-color: var(--bs-gray-700) !important;
+    background-color: var(--purple-700) !important;
     transition: background-color 0.4s ease-out!important;
   }
   #chatsend:hover i{
@@ -146,7 +150,7 @@
     background-color: rgba(var(--purple-800),0.7)!important;
   }
   #chatbox:disabled::placeholder{
-    color:var(--bs-gray-500)!important;
+    color:var(--purple-500)!important;
   }
 .shadow-top-lg{
   box-shadow: 0 -2rem 3rem rgba(0, 0, 0, 0.175)!important;
@@ -172,6 +176,9 @@
   /* Your mobile styles go here */
   .w-bubble{
     max-width: 300px;
+  }
+  #chatBody{
+    max-height: 780px;
   }
 }
 

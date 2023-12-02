@@ -1,4 +1,4 @@
-from flask import Flask , render_template,request,url_for,redirect,jsonify,send_file
+from flask import Flask , render_template,request,url_for,make_response,jsonify,send_file
 import os
 import openai
 from openai import OpenAI
@@ -61,6 +61,11 @@ def chat():
 
 @app.route("/", methods=["GET"])
 def home():
+     # Check if the request is from the service worker and if the template is in the cache
+    if 'Service-Worker' in request.headers and request.headers.get('Service-Worker') == 'script':
+        response = make_response(render_template('chat.html'))
+        response.headers['Cache-Control'] = 'public, max-age=3600'  # Set an expiration time
+        return response
     # if request.method == "POST":
     #     message = request.form.get("message")
     #     messages.append({"role":"user","content":message})
@@ -83,3 +88,11 @@ def serve_manifest():
 @app.route('/sw.js')
 def serve_sw():
     return send_file('sw.js', mimetype='application/javascript')
+@app.route('/fallback')
+def fallback():
+    if 'Service-Worker' in request.headers and request.headers.get('Service-Worker') == 'script':
+        response = make_response(render_template('fallback.html'))
+        response.headers['Cache-Control'] = 'public, max-age=3600'  # Set an expiration time
+        return response
+    
+    return render_template('fallback.html')
