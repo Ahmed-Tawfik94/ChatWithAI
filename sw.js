@@ -1,5 +1,5 @@
 const staticCacheName = 'site-static-v1';
-const dynamicCacheName = 'site-dynamic-v2';
+const dynamicCacheName = 'site-dynamic-v1';
 const assets = [
   '/',
   '/static/js/app.js',
@@ -7,7 +7,6 @@ const assets = [
   '/static/css/chat.css',
   '/static/css/bootstrap.min.css',
   '/static/js/bootstrap.min.js',
-  '/fallback.html'
 ];
 
 // cache size limit function
@@ -44,6 +43,7 @@ self.addEventListener('activate', evt => {
       );
     })
   );
+  self.skipWaiting();
 });
 
 // fetch events
@@ -69,5 +69,21 @@ self.addEventListener('fetch', evt => {
         })
         );
       }
+  }
+});
+// Check for updates in the background
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'CHECK_FOR_UPDATES') {
+    self.skipWaiting(); // Activate the new service worker
+    console.log('checking for updates')
+    // Respond to the message
+
+    // Send a message back to the client page
+    self.clients.matchAll().then((clients) => {
+      clients.forEach((client) => {
+        client.postMessage({ type: 'NEW_UPDATE_IS_AVAILABLE' });
+      });
+    });
+
   }
 });

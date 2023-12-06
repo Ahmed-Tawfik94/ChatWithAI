@@ -30,11 +30,18 @@
         margin: 0;
         padding: 0;
       }
+      #refresh-indicator {
+        text-align: center;
+        padding: 10px;
+        background-color: #f0f0f0;
+        display: none;
+      }
     </style>
     <title>Chat with AI</title>
     {% block style %}{% endblock %}
   </head>
   <body>
+    <div id="refresh-indicator">Pull to refresh</div>
     {% block content %}{% endblock %}
     <script src="{{url_for('static',filename='/js/mustache.min.js')}}"></script>
     <script src="{{url_for('static',filename='/js/highlight.min.js')}}"></script>
@@ -45,7 +52,6 @@
     <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/toastr@2.1.4/toastr.min.js"></script>
     <script src="{{url_for('static',filename='/js/app.js')}}"></script>
-    {% block script %}{% endblock %}
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
@@ -58,7 +64,47 @@
           });
         });
       }
+      const container = document.getElementsByTagName('body');
+          const refreshIndicator = document.getElementById('refresh-indicator');
+
+          let startY = 0;
+
+          container.addEventListener('touchstart', (e) => {
+            startY = e.touches[0].clientY;
+          });
+
+          container.addEventListener('touchmove', (e) => {
+            const deltaY = e.touches[0].clientY - startY;
+
+            if (deltaY > 0 && container.scrollTop === 0) {
+              e.preventDefault(); // Prevent the default scroll behavior
+
+              // Move the refresh indicator with the touch movement
+              refreshIndicator.style.transform = `translateY(${deltaY}px)`;
+
+              // Show the refresh indicator when pulled down enough
+              if (deltaY > 60) {
+                refreshIndicator.textContent = 'Release to refresh';
+              } else {
+                refreshIndicator.textContent = 'Pull to refresh';
+              }
+            }
+          });
+
+          container.addEventListener('touchend', () => {
+            if (container.scrollTop === 0) {
+              // Reset the refresh indicator position
+              refreshIndicator.style.transform = 'translateY(0)';
+              refreshIndicator.textContent = 'Pull to refresh';
+
+              // Simulate a refresh (replace with your actual refresh logic)
+              setTimeout(() => {
+                alert('Refreshed!');
+              }, 1000);
+            }
+          });
+
     </script>
-    
+    {% block script %}{% endblock %}
   </body>
 </html>

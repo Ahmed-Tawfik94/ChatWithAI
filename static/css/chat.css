@@ -23,8 +23,7 @@
 
   /* Remove scrollability from the body */
   body {
-    overflow: hidden;
-    height: 100vh;
+    overflow: auto;
   }
   body,#chatbox,#chatbox::placeholder {
     color:var(--purple-100)!important;
@@ -75,6 +74,9 @@
   }
   .border-purple-900{
     border-color: var(--purple-900)!important;
+  }
+  .border-purple-800{
+    border-color: var(--purple-800)!important;
   }
 
   .border-blue-800{
@@ -130,24 +132,25 @@
     transition: transform 1s ease;
     background-color:transparent;
   }
-  #chatsend:hover{
-    background-color: var(--purple-700) !important;
-    transition: background-color 0.4s ease-out!important;
+  #chatsend i{
+    /* background-color: var(--purple-700) !important; */
+    transform: rotate(-90deg)!important;
+    /* transition: background-color 0.4s ease-out!important; */
   }
-  #chatsend:hover i{
+  /* #chatsend:hover i{
     transform: rotate(-90deg)!important;
     transition: transform 0.5s ease-in-out!important;
   }
   #chatsend:not(:hover) i{
     transform: rotate(0deg)!important;
     transition: transform 0.5s ease-in-out!important;
-  }
+  } */
   #chatsend:disabled {
     cursor: not-allowed!important;
   }
   #chatbox:disabled {
     cursor: not-allowed!important;
-    background-color: rgba(var(--purple-800),0.7)!important;
+    /* background-color: rgba(var(--purple-800),0.7)!important; */
   }
   #chatbox:disabled::placeholder{
     color:var(--purple-500)!important;
@@ -177,9 +180,9 @@
   .w-bubble{
     max-width: 300px;
   }
-  #chatBody{
-    max-height: 780px;
-  }
+  /* #chatBody{
+    max-height: none;
+  } */
 }
 
 /* Target landscape mode specifically (optional) */
@@ -188,4 +191,11 @@
   .w-bubble{
     max-width: 400px;
   }
+}
+#check-for-updates{
+  height: 40px;
+  width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

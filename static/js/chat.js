@@ -18,6 +18,17 @@ const chatAI = function () {
 };
 chatAI.prototype.init = function () {
   const self = this;
+  // check for updates when the user performs a specific action
+  $('#check-for-updates').on('click', self.checkForUpdates);
+  // Listen for messages from the service worker
+navigator.serviceWorker.addEventListener('message', (event) => {
+  // Log the received message
+  // console.log('Client page received a message from the service worker:', event.data);
+  toastr.info('New version available page is going to refresh', 'Info');
+  setTimeout(function(){
+  window.location.reload();
+  }, 1000);
+});
   // Event listener for keydown event
   self.chatbox.on("keydown", function (event) {
     // Check for Command (⌘) key and Enter key
@@ -33,6 +44,7 @@ chatAI.prototype.init = function () {
 
   // Event listener for button click
   self.chatsend.on("click", ()=>{
+    if(self.chatbox.val().trim() === "")return;
     self.sendMessage()
   $('#chatbox').prop('disabled', true);
   });
@@ -77,12 +89,23 @@ chatAI.prototype.sendMessage = async function () {
         mardownToHtml = markdown.makeHtml(data.content);
         this.updateMessage(mardownToHtml,assistantMessageId);
       }else{
+        debugger
         toastr.error('This is an error message', 'Error');
+        $('#chatbox').prop('disabled', false);
+        $('#chatsend').prop('disabled', false);
+        $('#chatbox').focus();
       }
     
     } catch (error) {
-      // console.log(error)
-      toastr.error(`This is an error message ${error}`, 'Error');
+      if(error.message === 'Failed to fetch'){
+        toastr.error('Network Error', 'Error');
+      }else{
+        toastr.error(`${error.message}`, 'Error');
+      }
+      this.deleteMessage(assistantMessageId);
+      $('#chatbox').prop('disabled', false);
+      $('#chatsend').prop('disabled', false);
+      $('#chatbox').focus();
   }
 };
 
@@ -97,7 +120,7 @@ chatAI.prototype.showMessage = function (role,message,messageId) {
   if (role === "user") {
     $("#chatbox").val("");
   }
-  $("#chatBody").animate({  scrollTop: $("#chatBody")[0].scrollHeight}, 700);
+  $("#chatBody").animate({  scrollTop: $("#chatBody")[0].scrollHeight}, 0);
 }
 chatAI.prototype.updateMessage = function (content, messageId) {
   this.typed.stop();
@@ -111,6 +134,7 @@ chatAI.prototype.updateMessage = function (content, messageId) {
       $('#chatbox').prop('disabled', false);
       $('#chatsend').prop('disabled', false);
       $('#chatbox').focus();
+      $("#chatBody").animate({  scrollTop: $("#chatBody")[0].scrollHeight}, 700);
     }
   });
   const $parentContainer = $('#chatBody');
@@ -130,7 +154,7 @@ chatAI.prototype.updateMessage = function (content, messageId) {
         let heightToScroll = newHeight - lastHeight;
 
         // Scroll to the bottom of the parent container
-        $parentContainer.animate({  scrollTop: $parentContainer[0].scrollHeight}, 700);
+        $parentContainer.animate({  scrollTop: $parentContainer[0].scrollHeight}, 0);
 
         // Update the last height
         lastHeight = newHeight;
@@ -143,5 +167,17 @@ chatAI.prototype.updateMessage = function (content, messageId) {
 
 }
 
+chatAI.prototype.deleteMessage = (messageId)=> {
+    $(`#${messageId}`).remove();
+};
+chatAI.prototype.checkForUpdates = () => {
+  if (navigator.serviceWorker.controller) {
+    navigator.serviceWorker.controller.postMessage({ type: 'CHECK_FOR_UPDATES' });
+  }
+};
+
+// Periodically check for updates (e.g., every hour)
 const chat = new chatAI();
 chat.init();
+setInterval(chat.checkForUpdates, 60 * 60 * 1000);
+
